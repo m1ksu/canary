@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<title>miksu's park</title>
+	<link rel="stylesheet" href="style.css" />
+	<script src="jquery.js"></script>
+	<script src="script.js"></script>
+</head>
+
+<body>
+	<header>
+		<img class="marquee-blinky" src="./img/blinkiesCafe-R0.gif" />
+		<h1 style="display: inline" class="txt">miksu's park</h1>
+		<img class="marquee-blinky" src="./img/blinkiesCafe-R0.gif" />
+	</header>
+	<header>
+		<marquee scrollamount="15">
+			<h1 style="display: inline" class="txt"><span id="thanks">thanks for visiting!</span> —
+				respect outdoor ethics — public WC at bottom of page</h1>
+			<img class="marquee-blinky" src="https://momg.neocities.org/gifs/i-70989.gif" />
+		</marquee>
+	</header>
+	<section>
+		<h2 class="txt">i'm scared what's going on</h2>
+		<p>Oops, honey, I've failed the #dontdiealonechallenge!</p>
+		<p>Interact with <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></p>
+		<p>
+			I made this site as part of a personal growth.
+			I wanted to create something.
+			It'll be a challenge and a goal for me to do something I can write about every day.
+		</p>
+		<p>
+			I am a computer man. <img src="./img/puter.gif">
+		</p>
+	</section>
+
+	<section>
+		<h2>Mapping Gemini</h2>
+		<!--Explain what an internet protocol is-->
+		<!--Talk WHY -- talk what about you like in Gemini -->
+		<!--Mention certifications, mention robots.txt-->
+		<!--Explain that I don't know what I'm doing-->
+		<!--Is explaining any of this really necessary? Who cares about getaddrinfo?-->
+		<!--mention Gephi and how the graph works and what you made it with y'know the important stuff-->
+		<p>
+			I discovered the <a src="https://gemini.circumlunar.space/">Gemini protocol</a> in July 2022 while browsing the F-droid store on my phone out of boredom.
+			Yeah, I was on the toilet.
+			It immediately grabbed my interest (a whole new internet to explore!) so I downloaded a browser.
+			If you don't know what the Gemini protocol is, their <a src="https://gemini.circumlunar.space/">website</a>
+			gives a concise description:
+		</p>
+		<blockquote cite="https://gemini.circumlunar.space/">
+			Gemini is a new internet protocol which:
+			<ul>
+				<li>Is heavier than gopher</li>
+				<li>Is lighter than the web</li>
+				<li>Will not replace either</li>
+				<li>Strives for maximum power to weight ratio</li>
+				<li>Takes user privacy very seriously</li>
+			</ul>
+		</blockquote>
+		<p>
+			Almost immediately I saw it as a great project idea to map it all out into a neat grap. 
+			It seems simple; write a crawler, stumble through every link and you're done!
+			And it did turn out to be so simple. I wrote the first implementation in Python, 
+			and generated the following graphs with about 20k nodes representing individual pages on the Gemini network:
+		</p>
+		<img src="img/gemini_network_20k_1.jpg">
+		<img src="img/gemini_network_20k_2.jpg">
+		<p>
+			The code was suffering from a multitude of flaws, 
+			the most fatal of which was that eventually every thread would be stuck trying to establish connection with a dead link.
+			This wouldn't be a problem with a rational system as timeouts are a thing.
+			My systems weren't rational, though. The first library I used, <a href="https://github.com/cbrews/ignition">Ignition</a>, 
+			would get stuck endlessly trying to complete <code>Socket.getaddrinfo()</code> deep in the module's code. 
+			Requests in Ignition have a <code>timeout</code> parameter, as is expected, but for some reason requests would still hang
+			when <code>getaddrinfo()</code> couldn't be completed. 
+		</p>
+		<p>
+			I wasn't deterred from slapping my own ad-hoc patches onto the modules,
+			but I couldn't for the life of me figure out how I could add a timeout for this function.
+			Perhaps because it was because I had stayed up the entire night so I could fall asleep absurdly early the next day 
+			in anticipation of <a href="/london_pics.html">a trip to London</a>. 
+		</p>
+		<p>
+			Or perhaps it was because I am an impatient and unexperienced programmer. 
+		</p>
+		<p>
+			Either way, it didn't matter much, as my beloved compatriots struggling in the timeout struggle had led the way 
+			and asked the same question on the internet! And alas, it turns out to be an
+			<a href="https://sourceware.org/legacy-ml/glibc-bugs/2015-05/msg00228.html">actual bug</a> instead of user misconfiguration. 
+			Many people suggested workarounds, mainly involving Unix-exclusive signals to kill the stuck threads, 
+			but I as a Windows plebian could not afford to use such trickery (well, I <i>could</i> have, but I wasn't feeling like downloading WSL). 
+			So I figured switching to another Gemini library altogether would be easier. 
+			I looked around for a replacement before finally settling on <a href="https://framagit.org/bortzmeyer/agunua/">Agunua</a>. 
+			I was only creating requests and reading data, after all, so replacing my current code wasn't problematic in the slightest. 
+			In fact, Agunua's simple API was rather delightful to work with, and my code ended up looking a lot cleaner after a short rewrite.
+		</p>
+		<p>
+			However, I noticed a distinct lack of a timeout flag in its request function. 
+			Peeking into the code I noticed the following comment:
+		</p>
+		<blockquote>
+			<pre><code>WARNING: there is no timeout, so you risk being blocked for
+ever, for instance if the server is nasty and accepts
+connections but then never writes anything. The caller has to
+handle this, using alarm signals or stuff like that. An
+example is in the command-line client,
+agunua.py. (Implementing a timeout with PyOpenSSL is *hard*,
+see <a href="https://github.com/pyca/pyopenssl/issues/168">&lt;https://github.com/pyca/pyopenssl/issues/168&gt;</a>.)</code></pre>
+		</blockquote>  
+	<figure>
+		<img src="img/gemini_network_40k.jpg" onclick="window.open('img/gemini_network_40k_fullres.jpg')">
+		<figcaption>Click on image to view in 10000x10000 resolution.</figcaption>
+	</figure>
+	</section>
+	<section>
+		<h2>Escape from Tarkov inspirational quote generator</h2>
+		<p>Not sure why I ever made this.</p>
+		<img style="width: 50%" src="./img/tarkov quote generator concept.png">
+	</section>
+	<footer>
+		<a href="https://www.creating-worlds.net/staticfanfare/">
+			<img src="https://www.creating-worlds.net/staticfanfare/img/staticfanfare.gif" alt="staticfanfare badge" />
+		</a>
+	</footer>
+	</p>
+</body>
+
+</html>

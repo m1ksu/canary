@@ -1,0 +1,147 @@
+@font-face {
+	font-family: "Manifest Grotesk";
+	src: url("./fonts/ManifontGroteskBook.ttf");
+}
+
+body {
+	background-color: black;
+	background-image: url("./img/vines.jpg");
+	background-size: 1000px;
+	image-rendering: pixelated;
+	color: white;
+	font-family: "Manifest Grotesk", serif;
+	font-size: 18px;
+	padding: 0 10px;
+	margin: 20px auto;
+	line-height: 1.4;
+	max-width: 888px;
+}
+
+h1,
+h2 {
+	line-height: 1.2;
+}
+
+h2 {
+	margin-top: 0;
+}
+
+hr {
+	color: white;
+}
+
+blockquote {
+	font-family: monospace;
+}
+
+code {
+	color: #95BB25
+}
+
+.footer {
+	text-align: center;
+	font-style: italic;
+}
+
+header, section {
+	color: white;
+	background-color: #050000;
+	border: double 3px darkgreen;
+	margin: 0 auto 20px auto;
+	padding: 0.25rem;
+}
+
+section {
+	padding: 1rem; 
+}
+
+section > * {
+	vertical-align: middle;
+} 
+
+header > * {
+	vertical-align: text-top;
+}
+
+marquee > * {
+	vertical-align: text-top;
+}
+
+a {
+	text-decoration: none;
+	color: #ffc800;
+}
+
+a:hover {
+	color: #ffea22;
+}
+
+img {
+	image-rendering: pixelated;
+}
+
+.marquee-blinky {
+	display: inline; 
+	height: 2em;
+	margin: auto 1em;
+}
+
+#thanks {
+    background: linear-gradient(312deg, #FF00FF, #55CDFC, #FF00FF, #55CDFC);
+    background-size: 420% 100%;
+	background-clip: text;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+
+    animation: ThanksGradient 2s ease infinite;
+}
+
+@keyframes ThanksGradient {
+    0%{background-position: left top}
+    50%{background-position: right top}
+    100%{background-position: left top}
+}
+
+kbd {
+    background-color: #eee;
+    border-radius: 3px;
+    border: 1px solid #b4b4b4;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .2), 0 2px 0 0 rgba(255, 255, 255, .7) inset;
+    color: #333;
+    display: inline-block;
+    font-size: .85em;
+    font-weight: 700;
+    line-height: 1;
+    padding: 2px 4px;
+    white-space: nowrap;
+}
+
+.marquee-cont {
+	overflow: hidden;
+	height: 2em;
+}
+
+.marquee {
+	animation: scrolling 5s ease infinite;
+	overflow: hidden;
+}
+
+.marquee > * {
+	display: inline-block;
+	width: 100%;
+}
+
+@keyframes scrolling {
+    0% {
+        transform: translateX(50%);
+    }
+	20% {
+        transform: translateX(0%);
+	}
+	80% {
+        transform: translateX(0%);
+	}
+    100% {
+        transform: translateX(-50%);
+    }
+}
